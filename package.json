@@ -1,0 +1,24 @@
+{
+  "name": "Bamazon",
+  "version": "1.0.0",
+  "description": "Amazon-like storefront that will accept customer orders and update inventory.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mosfad/Bamazon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mosfad/Bamazon/issues"
+  },
+  "homepage": "https://github.com/mosfad/Bamazon#readme",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "mysql": "^2.17.1"
+  }
+}
