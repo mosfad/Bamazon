@@ -22,13 +22,10 @@ var connection = mysql.createConnection({
 
 connection.connect(function(error) {
     if (error) throw error;
-    //console.log("connected as id " + connection.threadId);
-    console.log("Connected!");
     connection.query("SELECT * FROM products", function(error, results) {
         if (error) throw error;
-        //console.log(results);
-        console.log("Here are the availabe items for sale in Bamazon");
-        console.log("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+        console.log("Items for sale at Bamazon");
+        console.log("=====================================================================================|");
         for (var i = 0; i < results.length; i++) {
             //console.log("Product ID: " + results[i].item_unique + " |Product name: " + results[i].product_name + " |Department name: " + results[i].department_name + " |Price: " + "$" +  results[i].price + " |Stock quantity: " + results[i].stock_quantity);
             console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " |");
@@ -36,7 +33,7 @@ connection.connect(function(error) {
         }
         getCustomerOrder(results);
     })
-    connection.end();
+    //connection.end();
 });
 
 
@@ -69,19 +66,15 @@ function getCustomerOrder(results) {
      }
     ])
     .then(function(answers) {
-    // Use user feedback for... whatever!!
+    // Use user feedback to process orders!!
         var orderId = parseInt(answers.id);
-        var indexOfOrder = orderId - 1;
         var orderQty = parseInt(answers.quantity);
-        //console.log("Order quantity is: " + orderQty);
-        //console.log("Order quantity is an " + typeof(orderQty));
-        //console.log("Inventory quantity is: " + results[orderId].stock_quantity);
-       if (orderQty <= results[indexOfOrder].stock_quantity) {
-          //If order qty is availabe, then complete the order.
-          completeOrder();
+        //Fulfill order if order quantity is not greater than stock quantity.
+       if (orderQty <= results[orderId - 1].stock_quantity) {
+          fulfillOrder(results, orderQty, orderId);
        }
        else {
-          //else cancel order 
+          //cancel order 
           cancelOrder();
        }
     })
@@ -89,11 +82,31 @@ function getCustomerOrder(results) {
 
 
 //Updates database and shows customer total cost of order
-function completeOrder() {
-    console.log("Item ordered is available, so your order will be completed shortly!")
+function fulfillOrder(results, qtyOrdered, idOfPurchase) {
+    var indexOfOrder = idOfPurchase - 1;
+    var currentStockQty = results[indexOfOrder].stock_quantity;
+    var qtyRemaining = currentStockQty - qtyOrdered;
+    console.log("=====================================================================================|");
+    console.log("Item ordered: " + results[indexOfOrder].product_name + "\nQuantity ordered: " + qtyOrdered);
+    console.log("Fulfilling order...");
+    //Update database to show remaining quantity.
+    var customerOrder = [ {stock_quantity: qtyRemaining}, {item_unique: idOfPurchase}];
+    connection.query("UPDATE products SET ? WHERE ?", customerOrder, function(error, rows) {
+       if (error) throw error;
+        //console.log(rows);
+    })
+    connection.query("SELECT * FROM products", function(error, res) {
+        if (error) throw error;
+        //Show customer total cost of order
+        console.log("-----------------------------------------")
+        console.log("Total cost of order: $" + (qtyOrdered * res[indexOfOrder].price) );
+        console.log("-----------------------------------------");
+    })
+    connection.end();
 }
 
 //Cancels customer's order and displays insufficient qty when inventory qty is less than order qty.
 function cancelOrder() {
-    console.log("Insufficient quantity! Unvortunately, your order will be cancelled.")
+    console.log("Insufficient quantity in stock! Order will be canceled.")
+
 }
