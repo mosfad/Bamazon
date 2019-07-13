@@ -107,6 +107,7 @@ function fulfillOrder(results, qtyOrdered, idOfPurchase) {
 
 //Cancels customer's order and displays insufficient qty when inventory qty is less than order qty.
 function cancelOrder() {
-    console.log("Insufficient quantity in stock! Order will be canceled.")
-
+    console.log("Insufficient quantity in stock! Order will be canceled.");
+    connection.end();
+    return
 }
