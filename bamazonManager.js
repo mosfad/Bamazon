@@ -4,6 +4,7 @@ var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var fs = require("fs");
+var cTable = require("console.table");
 
 
 var connection = mysql.createConnection({
@@ -65,17 +66,21 @@ function getManagerAction() {
 //==================================================================================================================================================
 //Displays every item for sale, including id, name, price, and quantity
 function viewAllInventory() {
-    //
+    //object holding inventory
+    var inventory = [];
     connection.query("SELECT * FROM products", function(error, results) {
         if (error) throw error;
-        console.log("All available items for sale at Bamazon");
-        console.log("=====================================================================================|");
+        console.log("========================================|")
+        console.log("All available items for sale at Bamazon:");
+        console.log("========================================|");
         for (var i = 0; i < results.length; i++) {
             //console.log("Product ID: " + results[i].item_unique + " |Product name: " + results[i].product_name + " |Department name: " + results[i].department_name + " |Price: " + "$" +  results[i].price + " |Stock quantity: " + results[i].stock_quantity);
-            console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " | Stock quantity: " + results[i].stock_quantity);
-
+            //console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " | Stock quantity: " + results[i].stock_quantity);
+            inventory.push(results[i]);
         }
-        console.log("=====================================================================================|");
+        var prettyTable = cTable.getTable(inventory);
+        console.log(prettyTable);
+        //console.log("=====================================================================================|");
     })
     connection.end();
 }  
@@ -84,17 +89,22 @@ function viewAllInventory() {
 function viewLowInventory() {
     //
     var targetColumns = ["item_unique", "product_name", "price", "stock_quantity"];
-    var qtyLow = 6;
+    var qtyLow = 5;
+    var inventory = [];
     connection.query("SELECT ?? FROM ?? WHERE stock_quantity < ?", [targetColumns, "products", qtyLow], function(error, results) {
         if (error) throw error;
-        console.log("All available items for sale at Bamazon");
-        console.log("=====================================================================================|");
+        console.log("========================================|")
+        console.log("All items with low inventory at Bamazon:");
+        console.log("========================================|");
+        //console.log("=====================================================================================|");
         for (var i = 0; i < results.length; i++) {
             //console.log("Product ID: " + results[i].item_unique + " |Product name: " + results[i].product_name + " |Department name: " + results[i].department_name + " |Price: " + "$" +  results[i].price + " |Stock quantity: " + results[i].stock_quantity);
-            console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " | Stock quantity: " + results[i].stock_quantity);
-
+            //console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " | Stock quantity: " + results[i].stock_quantity);
+            inventory.push(results[i]);
         }
-        console.log("=====================================================================================|");
+        //console.log("=====================================================================================|");
+        var prettyTable = cTable.getTable(inventory);
+        console.log(prettyTable);
     })
     connection.end();
 }  
@@ -117,26 +127,26 @@ function addToInventory(results) {
 
     ])
     .then(function(answers) {
-    // Use user feedback to process orders!
+        // Use manager's feedback to update inventory!
         //Parse manager's answers.
         var idOfItem = parseInt(answers.itemId);
         var qtyToAdd = parseInt(answers.addQty);
+        //get the quantity the manager will add.
+        var qtySum = qtyToAdd;
+        //Get access to inventory data
+        connection.query("SELECT * FROM products", function(error, results) {
+            if (error) throw error;
+            //Get the sum of current stock qty by adding current stock quantity.
+            qtySum += results[idOfItem -1].stock_quantity;
+            //Update stock quantity after increase.
+            var managerUpdate = [{stock_quantity: qtySum}, {item_unique: idOfItem}];
+            connection.query("UPDATE products SET ? WHERE ?", managerUpdate, function(error, rows) {
+                if (error) throw error;  
+            })
+            connection.end();
+        }) 
+        //connection.end();
     })
-
-    //Get access to inventory data
-    connection.query("SELECT * FROM products", function(error, results) {
-        if (error) throw error;
-        //get sum of current stock qty and qty to add
-        qtySum = qtyToAdd + results[idOfItem -1].stock_quantity;
-    })
-
-    //Update stock quantity after increase.
-    var managerUpdate = [ {stock_quantity: qtySum}, {item_unique: idOfItem}];
-    connection.query("UPDATE products SET ? WHERE ?", managerUpdate, function(error, rows) {
-       if (error) throw error;
-        console.log(rows);
-    })
-    connection.end();
 }  
 
 //Allows the manager to add a new item to the store.
@@ -167,16 +177,16 @@ function addNewProduct() {
 
     ])
     .then(function(answers) {
-    // Use manager's inputs to add new item!
+        // Use manager's inputs to add new item!
         //Parse manager's answers.
         var idOfItem = parseInt(answers.itemId);
-        var qtyToAdd = parseInt(answers.addQty);
+        var qtyToAdd = parseInt(answers.stockQty);
+        //Add new item to the store(database).
+        var newItem = {product_name: answers.itemName, department_name: answers.deptName, price: answers.price, stock_quantity: qtyToAdd}
+        connection.query("INSERT INTO products SET ?", newItem, function(error, rows) {
+            if (error) throw error;
+        })
+        connection.end();
     })
-    //Add new item to the store(database).
-    var newItem ={product_name: answers.itemName, department_name: answers.deptName, price: answers.price, stock_quantity: qtyToAdd}
-    connection.query("INSERT INTO  products SET ?", newItem, function(error, rows) {
-       if (error) throw error;
-        console.log(rows);
-    })
-    connection.end();
+    //connection.end();
 }  

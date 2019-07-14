@@ -4,6 +4,7 @@ var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var fs = require("fs");
+var cTable = require("console.table");
 
 
 var connection = mysql.createConnection({
@@ -21,16 +22,20 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function(error) {
+    var inventory = [];
     if (error) throw error;
     connection.query("SELECT * FROM products", function(error, results) {
         if (error) throw error;
+        console.log("========================================|")
         console.log("Items for sale at Bamazon");
-        console.log("=====================================================================================|");
+        console.log("========================================|");
         for (var i = 0; i < results.length; i++) {
             //console.log("Product ID: " + results[i].item_unique + " |Product name: " + results[i].product_name + " |Department name: " + results[i].department_name + " |Price: " + "$" +  results[i].price + " |Stock quantity: " + results[i].stock_quantity);
-            console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " |");
-
+            //console.log("| Product ID: " + results[i].item_unique + " | Product name: " + results[i].product_name  + " | Price: " + "$" +  results[i].price + " |");
+            inventory.push(results[i]);
         }
+        var prettyTable = cTable.getTable(inventory);
+        console.log(prettyTable);
         getCustomerOrder(results);
     })
     //connection.end();
@@ -86,11 +91,11 @@ function fulfillOrder(results, qtyOrdered, idOfPurchase) {
     var indexOfOrder = idOfPurchase - 1;
     var currentStockQty = results[indexOfOrder].stock_quantity;
     var qtyRemaining = currentStockQty - qtyOrdered;
-    console.log("=====================================================================================|");
+    console.log("-------------------------------------------");
     console.log("Item ordered: " + results[indexOfOrder].product_name + "\nQuantity ordered: " + qtyOrdered);
     console.log("Fulfilling order...");
     //Update database to show remaining quantity.
-    var customerOrder = [ {stock_quantity: qtyRemaining}, {item_unique: idOfPurchase}];
+    var customerOrder = [{stock_quantity: qtyRemaining}, {item_unique: idOfPurchase}];
     connection.query("UPDATE products SET ? WHERE ?", customerOrder, function(error, rows) {
        if (error) throw error;
         //console.log(rows);
