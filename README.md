@@ -6,10 +6,11 @@ When the manager view app is run, it also displays a list of menu options. These
 
 The app is designed to help customers purchase products online, and managers track and update inventory. The customer and manager views are synchronized to provide up to date information. A feature that I would like to include is a supervisor view, which would allow a supervisor to track the performance of various departments within the store.
 
-*Please note that the program see the videos below to see how the customer and manager views run*. low. 
+*Please note that the program see the videos below to see how the customer and manager views run*. 
 
 ### App Running in terminal
-[Video of customer view](https://drive.google.com/open?id=1lom06f7x_c9AUOpmoaQ-2B_JvV5Bro2X)   [Video of manager view](https://drive.google.com/open?id=1s8yyceo1TrtuSF4C3QQrgNyNkEvDnxTG)
+[Video of customer view](https://drive.google.com/open?id=1lom06f7x_c9AUOpmoaQ-2B_JvV5Bro2X)               
+[Video of manager view](https://drive.google.com/open?id=1s8yyceo1TrtuSF4C3QQrgNyNkEvDnxTG)
 
 ### Contact me about Liri Node App
 <maafadina@gmail.com>
