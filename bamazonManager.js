@@ -141,14 +141,12 @@ function addToInventory(results) {
       // Use manager's feedback to update inventory!
       //Parse manager's answers.
       var idOfItem = parseInt(answers.itemId);
-      var qtyToAdd = parseInt(answers.addQty);
-      //get the quantity the manager will add.
-      var qtySum = qtyToAdd;
       //Get access to inventory data
       connection.query("SELECT * FROM products", function(error, results) {
         if (error) throw error;
         //Get the sum of current stock qty by adding current stock quantity.
-        qtySum += results[idOfItem - 1].stock_quantity;
+        var qtySum =
+          parseInt(answers.addQty) + results[idOfItem - 1].stock_quantity;
         //Update stock quantity after increase.
         var managerUpdate = [
           { stock_quantity: qtySum },
@@ -194,16 +192,13 @@ function addNewProduct() {
       }
     ])
     .then(function(answers) {
-      // Use manager's inputs to add new item!
-      //Parse manager's answers.
-      var idOfItem = parseInt(answers.itemId);
-      var qtyToAdd = parseInt(answers.stockQty);
+      // Use manager's inputs to add new item.
       //Add new item to the store(database).
       var newItem = {
         product_name: answers.itemName,
         department_name: answers.deptName,
         price: answers.price,
-        stock_quantity: qtyToAdd
+        stock_quantity: parseInt(answers.stockQty)
       };
       connection.query("INSERT INTO products SET ?", newItem, function(
         error,
