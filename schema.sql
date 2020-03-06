@@ -43,4 +43,9 @@ CREATE TABLE products
         (10, 2) NOT NULL,
     PRIMARY KEY
         (department_id)
-)
+);
+
+
+        ALTER products
+        ADD product_sales DECIMAL
+        (10, 2)

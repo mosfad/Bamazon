@@ -106,15 +106,21 @@ function fulfillOrder(results, qtyOrdered, idOfPurchase) {
   //Update database to show remaining quantity.
   var customerOrder = [
     { stock_quantity: qtyRemaining },
+    {
+      product_sale:
+        results[indexOfOrder].product_sale +
+        qtyOrdered * results[indexOfOrder].price
+    },
     { item_unique: idOfPurchase }
   ];
-  connection.query("UPDATE products SET ? WHERE ?", customerOrder, function(
+  connection.query("UPDATE products SET ?, ? WHERE ?", customerOrder, function(
     error,
     rows
   ) {
     if (error) throw error;
     //console.log(rows);
   });
+
   connection.query("SELECT * FROM products", function(error, res) {
     if (error) throw error;
     //Show customer total cost of order
