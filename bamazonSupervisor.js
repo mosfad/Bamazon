@@ -2,7 +2,7 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var CTable = require("console.table");
+var cTable = require("console.table");
 
 var connection = mysql.createConnection({
   host: keys.mysqlAuth.host,
@@ -52,26 +52,26 @@ function viewProductSales() {
   var inventory = [];
   var targetColumns = [
     "d.department_id",
-    "d.deparment_name",
+    "d.department_name",
     "d.over_head_costs",
     "p.product_sales",
-    "p.product_sales - d.over_head_costs",
+    "product_sales",
+    "p.product_sales",
+    "d.over_head_costs",
     "total_profits",
     "products",
     "p",
     "departments",
-    "p",
+    "d",
     "p.department_name",
-    "d.deparment_name"
+    "d.department_name",
+    "d.department_name"
   ];
   connection.query(
-    "SELECT ??, ??, ??, ??, ?? AS ??  FROM ?? AS ?? RIGHT JOIN ?? AS ?? ON ?? = ??",
+    "SELECT ??, ??, ??, SUM(??) AS ??, (SUM(??) - ??) AS ??  FROM ?? AS ?? INNER JOIN ?? AS ?? ON ?? = ?? GROUP BY ??",
     targetColumns,
     function(error, results, fields) {
-      // error will be an Error if one occurred during the query
-      // results will contain the results of the query
-      // fields will contain information about the returned results fields (if any)
-      //populate inventory with store items.
+      console.log(results);
       for (var item of results) {
         inventory.push(item);
       }
