@@ -71,11 +71,19 @@ function viewProductSales() {
     "SELECT ??, ??, ??, SUM(??) AS ??, (SUM(??) - ??) AS ??  FROM ?? AS ?? INNER JOIN ?? AS ?? ON ?? = ?? GROUP BY ??",
     targetColumns,
     function(error, results, fields) {
-      console.log(results);
+      //console.log(results);
       for (var item of results) {
         inventory.push(item);
       }
       var prettyTable = cTable.getTable(inventory);
+      console.log(
+        "=======================================================================================" +
+          "\n" +
+          "                          PRODUCT SALES BY DEPARTMENTS" +
+          "\n" +
+          "=======================================================================================" +
+          "\n"
+      );
       console.log(prettyTable);
     }
   );

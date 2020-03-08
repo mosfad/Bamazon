@@ -49,3 +49,11 @@ CREATE TABLE products
         ALTER products
         ADD product_sales DECIMAL
         (10, 2)
+
+        INSERT INTO departments
+            (department_name, over_head_costs)
+        VALUES(Electronics, 400);
+
+        SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS product_sales, (p.product_sales - d.over_head_costs) AS total_profits
+        FROM products AS p INNER JOIN departments AS d ON p.department_name = d.department_name
+        GROUP BY d.department_name;
