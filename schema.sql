@@ -52,7 +52,10 @@ CREATE TABLE products
 
         INSERT INTO departments
             (department_name, over_head_costs)
-        VALUES(Electronics, 400);
+        VALUES("Electronics", 400);
+        INSERT INTO departments
+            (department_name, over_head_costs)
+        VALUES("Food", 230.50);
 
         SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS product_sales, (p.product_sales - d.over_head_costs) AS total_profits
         FROM products AS p INNER JOIN departments AS d ON p.department_name = d.department_name

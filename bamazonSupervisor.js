@@ -77,7 +77,8 @@ function viewProductSales() {
       }
       var prettyTable = cTable.getTable(inventory);
       console.log(
-        "=======================================================================================" +
+        "\n" +
+          "=======================================================================================" +
           "\n" +
           "                          PRODUCT SALES BY DEPARTMENTS" +
           "\n" +
@@ -101,17 +102,23 @@ function createDepartment() {
       {
         type: "input",
         name: "overheadCosts",
-        message: "What is the overhead cost for this department?"
+        message: "What is the overhead cost for this department?",
+        validate: function(value) {
+          if (isNaN(value)) {
+            return false;
+          }
+          return true;
+        }
       }
     ])
     .then(function(answers) {
       // Use manager's inputs to add new item.
       //Add new item to the store(database).
       var newDeparment = {
-        product_name: answers.departmentName,
-        department_name: answers.overheadCosts
+        department_name: answers.departmentName,
+        over_head_costs: parseFloat(answers.overheadCosts)
       };
-      connection.query("INSERT INTO deparments SET ?", newDeparment, function(
+      connection.query("INSERT INTO departments SET ?", newDeparment, function(
         error,
         rows
       ) {
