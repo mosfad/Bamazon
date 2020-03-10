@@ -13,9 +13,11 @@ _A supervisor view, which will be added in a future release, tracks the performa
 - MySQL
 - Inquirer.js(Command line interactive package)
 
-## Instructions for customer view
+## Customer View
 
 ### ![Demo](https://raw.githubusercontent.com/mosfad/Bamazon/master/customerView.gif)
+
+### Instructions
 
 _*Please execute the MySQL code inside schema.sql in a MySQL IDE or command line. This action will create bamazon database and products table*_
 
@@ -24,7 +26,11 @@ _*Please execute the MySQL code inside schema.sql in a MySQL IDE or command line
 3. The app will prompt user to enter id of product and the quantity to purchase; please use inventory lists to enter valid numbers.
 4. The app will either complete the order or cancel the order.
 
-## Instructions for manager view
+## Manager View
+
+### ![Demo](https://raw.githubusercontent.com/mosfad/Bamazon/master/managerView.gif)
+
+## Instructions
 
 1. In the terminal, run `node bamazonManager.js` to start the app.
 2. The app will display a list of options which allow the user to view inventory or update existing inventory.
@@ -32,11 +38,18 @@ _*Please execute the MySQL code inside schema.sql in a MySQL IDE or command line
 4. The add inventory option allows user to increase the stock quantity; please enter a positive number.
 5. The add product option allows user to add a new item to the inventory.
 
-## App Running in the terminal
+## Supervisor View
 
-- **[Customer View](https://drive.google.com/open?id=1lom06f7x_c9AUOpmoaQ-2B_JvV5Bro2X)**
+### ![Demo](https://raw.githubusercontent.com/mosfad/Bamazon/master/supervisorView.gif)
 
-- **[Manager View](https://drive.google.com/open?id=1s8yyceo1TrtuSF4C3QQrgNyNkEvDnxTG)**
+## Instructions
+
+1. In the terminal, run `node bamazonSupervisor.js` to start the app.
+2. The app will display a list of options which allow the user to view product sales by department or add a new department.
+3. The product sales option displays the over head costs and total profits for each department.
+   `total profit for a department = sum of product sales - over head costs`
+4. The add a new department option allows user to enter the department name and over head costs. Please enter a positive
+   number for the over head costs.
 
 ## Contact us about Bamazon
 
