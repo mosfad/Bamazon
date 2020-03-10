@@ -107,9 +107,10 @@ function fulfillOrder(results, qtyOrdered, idOfPurchase) {
   var customerOrder = [
     { stock_quantity: qtyRemaining },
     {
-      product_sales:
+      product_sales: (
         results[indexOfOrder].product_sales +
         qtyOrdered * results[indexOfOrder].price
+      ).toFixed(2)
     },
     { item_unique: idOfPurchase }
   ];
