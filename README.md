@@ -15,7 +15,7 @@ _A supervisor view, which will be added in a future release, tracks the performa
 
 ## Instructions for customer view
 
-### ![Demo](https://raw.githubusercontent.com/mosfad/TravelRush2/master/customerView.gif)
+### ![Demo](https://raw.githubusercontent.com/mosfad/Bamazon/master/customerView.gif)
 
 _*Please execute the MySQL code inside schema.sql in a MySQL IDE or command line. This action will create bamazon database and products table*_
 
