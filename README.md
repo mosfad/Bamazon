@@ -4,8 +4,7 @@ Bamazon is an Amazon-like storefront that will accepts customer orders and allow
 
 ## Overview
 
-Bamazon is a Node.js app which uses MySQL database to maintain an inventory of products. The customer view helps the customer purchase products online, while the manager view helps the manager to track and update inventory. The customer and manager views are synchronized to provide up to date information.
-_A supervisor view, which will be added in a future release, tracks the performance of various departments within the store._
+Bamazon is a Node.js app which uses MySQL database to maintain an inventory of products. The _customer view_ helps the customer purchase products online. The _manager view_ helps the manager to track, update and add inventory. The _supervisor view_ tracks the performance of existing departments within the store and add new departments to the store. The store is updated on every transaction across the various views.
 
 ### Technologies used
 
